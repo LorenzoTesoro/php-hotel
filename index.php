@@ -43,11 +43,23 @@ var_dump($_GET);
 
 if (empty($_GET)) {
     $hotels;
-} else {
+} else if (!empty($_GET['parking'])) {
     $filtered_array = [];
 
     foreach ($hotels as $hotel) {
         if ($_GET['parking'] === $hotel['parking']) {
+            $filtered_array[] = $hotel;
+        }
+    }
+
+    $hotels = $filtered_array;
+
+    var_dump($hotels);
+} else if (!empty($_GET['vote'])) {
+    $filtered_array = [];
+
+    foreach ($hotels as $hotel) {
+        if ($_GET['vote'] >= $hotel['vote']) {
             $filtered_array[] = $hotel;
         }
     }
