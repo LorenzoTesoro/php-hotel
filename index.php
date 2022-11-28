@@ -39,11 +39,12 @@ $hotels = [
 
 ];
 
-var_dump($_GET);
 
-if (empty($_GET)) {
-    $hotels;
-} else if (!empty($_GET['parking'])) {
+if (isset($_GET)) {
+    $filtered_array = $hotels;
+}
+
+if (!empty($_GET['parking'])) {
     $filtered_array = [];
 
     foreach ($hotels as $hotel) {
@@ -52,24 +53,30 @@ if (empty($_GET)) {
         }
     }
 
-    $hotels = $filtered_array;
+    $filtered_array;
+}
 
-    var_dump($hotels);
-} else if (!empty($_GET['vote'])) {
+if (!empty($_GET['vote'])) {
     $filtered_array = [];
 
     foreach ($hotels as $hotel) {
-        if ($_GET['vote'] >= $hotel['vote']) {
+        if (number_format($_GET['vote']) <= $hotel['vote']) {
             $filtered_array[] = $hotel;
         }
     }
 
-    $hotels = $filtered_array;
-
-    var_dump($hotels);
+    $filtered_array;
 }
 
+if (!empty($_GET['parking']) && !empty($_GET['vote'])) {
+    $filtered_array = [];
 
+    foreach ($hotels as $hotel) {
+        if ($_GET['parking'] === $hotel['parking'] && number_format($_GET['vote']) <= $hotel['vote']) {
+            $filtered_array[] = $hotel;
+        }
+    }
+}
 
 
 
@@ -140,7 +147,7 @@ Se non viene specificato nessun filtro, visualizzare come in precedenza tutti gl
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($hotels as $hotel) : ?>
+                <?php foreach ($filtered_array as $hotel) : ?>
                     <tr class="">
                         <td scope="row"><?php echo $hotel['name'] ?></td>
                         <td><?php echo $hotel['description'] ?></td>
